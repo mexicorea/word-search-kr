@@ -35,7 +35,7 @@ export function Cell({
   const pos: Position = { row, col }
 
   let cellClass =
-    'flex items-center justify-center rounded-lg font-bold select-none cursor-pointer transition-all duration-100 aspect-square text-lg md:text-xl lg:text-2xl '
+    'flex items-center justify-center rounded-lg font-bold select-none cursor-pointer transition-all duration-100 aspect-square text-xl md:text-2xl lg:text-3xl '
 
   if (isFound && foundColor) {
     cellClass += foundColor

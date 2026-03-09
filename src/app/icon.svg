@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- 배경 -->
+  <rect width="32" height="32" rx="7" fill="#1D4ED8"/>
+
+  <!-- 3×3 격자: 셀 8×8, 간격 2, 시작 좌표 (2,2) -->
+
+  <!-- 행 0 -->
+  <rect x="2"  y="2"  width="8" height="8" rx="2" fill="#FCD34D"/>
+  <rect x="12" y="2"  width="8" height="8" rx="2" fill="white" opacity="0.55"/>
+  <rect x="22" y="2"  width="8" height="8" rx="2" fill="white" opacity="0.55"/>
+
+  <!-- 행 1 -->
+  <rect x="2"  y="12" width="8" height="8" rx="2" fill="white" opacity="0.55"/>
+  <rect x="12" y="12" width="8" height="8" rx="2" fill="#FCD34D"/>
+  <rect x="22" y="12" width="8" height="8" rx="2" fill="white" opacity="0.55"/>
+
+  <!-- 행 2 -->
+  <rect x="2"  y="22" width="8" height="8" rx="2" fill="white" opacity="0.55"/>
+  <rect x="12" y="22" width="8" height="8" rx="2" fill="white" opacity="0.55"/>
+  <rect x="22" y="22" width="8" height="8" rx="2" fill="#FCD34D"/>
+
+  <!-- 대각선 하이라이트 연결선 (찾은 단어 표시) -->
+  <line x1="6" y1="6" x2="26" y2="26" stroke="#FCD34D" stroke-width="2.5" stroke-linecap="round" opacity="0.5"/>
+</svg>
