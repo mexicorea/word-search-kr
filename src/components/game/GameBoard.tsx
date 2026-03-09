@@ -12,7 +12,7 @@ export function GameBoard() {
 
   return (
     <>
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-4 md:p-8">
+      <div className="min-h-screen bg-gradient-to-br from-rose-50 via-violet-50 to-sky-100 p-4 md:p-8">
         <div className="max-w-6xl mx-auto">
           {/* 헤더 */}
           <header className="mb-6 text-center">

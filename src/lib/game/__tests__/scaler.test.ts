@@ -15,12 +15,12 @@ describe('scaler', () => {
       expect(config.timeSeconds).toBe(60)
     })
 
-    it('8x8 설정은 7개 단어, 120초여야 한다', () => {
+    it('8x8 설정은 7개 단어, 100초여야 한다', () => {
       const config = GRID_CONFIGS['8x8']
       expect(config.cols).toBe(8)
       expect(config.rows).toBe(8)
       expect(config.wordCount).toBe(7)
-      expect(config.timeSeconds).toBe(120)
+      expect(config.timeSeconds).toBe(100)
     })
   })
 
@@ -28,7 +28,7 @@ describe('scaler', () => {
     it('7x5 설정을 올바르게 반환해야 한다', () => {
       const config = getGridConfig('7x5')
       expect(config.wordCount).toBe(4)
-      expect(config.timeSeconds).toBe(75)
+      expect(config.timeSeconds).toBe(70)
     })
   })
 })

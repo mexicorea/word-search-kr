@@ -60,4 +60,6 @@ export interface GameState {
   status: GameStatus
   gridSize: GridSize
   hintLevel: 0 | 1 | 2
+  justFoundCells: string[]
+  showUnfound: boolean
 }

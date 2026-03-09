@@ -3,11 +3,32 @@
 import { useGameStore } from '@/store/game-store'
 
 export function GameOverModal() {
-  const { status, foundWords, placedWords, initGame, gridSize } = useGameStore()
+  const { status, foundWords, placedWords, initGame, gridSize, showUnfound, toggleUnfound } =
+    useGameStore()
 
   if (status !== 'won' && status !== 'lost') return null
 
   const isWon = status === 'won'
+
+  // compact bottom bar: 패배 후 정답 보기 활성화 상태
+  if (!isWon && showUnfound) {
+    return (
+      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-50 px-4 py-3 flex gap-2">
+        <button
+          onClick={toggleUnfound}
+          className="flex-1 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold rounded-xl transition-colors text-sm"
+        >
+          돌아가기
+        </button>
+        <button
+          onClick={() => initGame(gridSize)}
+          className="flex-1 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl transition-colors text-sm"
+        >
+          다시 시작
+        </button>
+      </div>
+    )
+  }
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
@@ -45,6 +66,14 @@ export function GameOverModal() {
         )}
 
         <div className="flex flex-col gap-2">
+          {!isWon && (
+            <button
+              onClick={toggleUnfound}
+              className="w-full py-3 bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-xl transition-colors"
+            >
+              정답 보기
+            </button>
+          )}
           <button
             onClick={() => initGame(gridSize)}
             className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl transition-colors"

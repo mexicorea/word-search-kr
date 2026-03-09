@@ -14,6 +14,7 @@ interface GameActions {
   endDrag: () => void
   tick: () => void
   setGridSize: (size: GridSize) => void
+  toggleUnfound: () => void
 }
 
 type GameStore = GameState & GameActions
@@ -31,6 +32,8 @@ function buildInitialState(size: GridSize): Omit<GameState, 'grid' | 'placedWord
     status: 'idle',
     gridSize: size,
     hintLevel: 0,
+    justFoundCells: [],
+    showUnfound: false,
   }
 }
 
@@ -115,13 +118,16 @@ export const useGameStore = create<GameStore>((set, get) => ({
     if (found) {
       const newFoundWords: FoundWord[] = [...foundWords, found]
       const allFound = isAllWordsFound(placedWords, newFoundWords)
+      const justFoundCells = found.cells.map((p) => `${p.row},${p.col}`)
       set({
         foundWords: newFoundWords,
         selectedCells: [],
         dragStart: null,
         dragDirection: null,
         status: allFound ? 'won' : 'playing',
+        justFoundCells,
       })
+      setTimeout(() => set({ justFoundCells: [] }), 600)
     } else {
       set({
         selectedCells: [],
@@ -129,6 +135,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
         dragDirection: null,
       })
     }
+  },
+
+  toggleUnfound: () => {
+    set((state) => ({ showUnfound: !state.showUnfound }))
   },
 
   tick: () => {

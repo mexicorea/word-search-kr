@@ -9,18 +9,21 @@ interface CellProps {
   isSelected: boolean
   isFound: boolean
   foundColor?: string
+  justFoundIndex?: number
+  unfoundColor?: string
+  unfoundDelay?: number
   onPointerDown: (pos: Position) => void
 }
 
-// 단어별 고정 색상 팔레트
+// 단어별 고정 색상 팔레트 (파스텔톤)
 const FOUND_COLORS = [
-  'bg-rose-400 text-white',
-  'bg-violet-500 text-white',
-  'bg-emerald-500 text-white',
-  'bg-amber-500 text-white',
-  'bg-sky-500 text-white',
-  'bg-pink-500 text-white',
-  'bg-teal-500 text-white',
+  'bg-rose-200 text-rose-800',
+  'bg-violet-200 text-violet-800',
+  'bg-emerald-200 text-emerald-800',
+  'bg-amber-200 text-amber-800',
+  'bg-sky-200 text-sky-800',
+  'bg-pink-200 text-pink-800',
+  'bg-teal-200 text-teal-800',
 ]
 
 export function Cell({
@@ -30,6 +33,9 @@ export function Cell({
   isSelected,
   isFound,
   foundColor,
+  justFoundIndex,
+  unfoundColor,
+  unfoundDelay,
   onPointerDown,
 }: CellProps) {
   const pos: Position = { row, col }
@@ -39,15 +45,29 @@ export function Cell({
 
   if (isFound && foundColor) {
     cellClass += foundColor
+  } else if (unfoundColor) {
+    cellClass += unfoundColor + ' animate-unfound-reveal'
   } else if (isSelected) {
     cellClass += 'bg-yellow-300 text-gray-900 scale-105 shadow-md'
   } else {
     cellClass += 'bg-white text-gray-800 hover:bg-blue-50 border border-gray-200'
   }
 
+  if (justFoundIndex !== undefined) {
+    cellClass += ' animate-cell-celebrate'
+  }
+
+  const style =
+    justFoundIndex !== undefined
+      ? { animationDelay: `${justFoundIndex * 60}ms` }
+      : unfoundDelay !== undefined
+        ? { animationDelay: `${unfoundDelay}ms` }
+        : undefined
+
   return (
     <div
       className={cellClass}
+      style={style}
       data-row={row}
       data-col={col}
       onPointerDown={(e) => {
