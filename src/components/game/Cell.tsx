@@ -1,6 +1,6 @@
 'use client'
 
-import type { Position, FoundWord } from '@/types/game'
+import type { Position } from '@/types/game'
 
 interface CellProps {
   syllable: string
@@ -10,7 +10,6 @@ interface CellProps {
   isFound: boolean
   foundColor?: string
   onPointerDown: (pos: Position) => void
-  onPointerEnter: (pos: Position) => void
 }
 
 // 단어별 고정 색상 팔레트
@@ -32,12 +31,11 @@ export function Cell({
   isFound,
   foundColor,
   onPointerDown,
-  onPointerEnter,
 }: CellProps) {
   const pos: Position = { row, col }
 
   let cellClass =
-    'flex items-center justify-center rounded-lg font-bold select-none cursor-pointer transition-all duration-100 aspect-square text-base md:text-lg '
+    'flex items-center justify-center rounded-lg font-bold select-none cursor-pointer transition-all duration-100 aspect-square text-lg md:text-xl lg:text-2xl '
 
   if (isFound && foundColor) {
     cellClass += foundColor
@@ -50,12 +48,11 @@ export function Cell({
   return (
     <div
       className={cellClass}
+      data-row={row}
+      data-col={col}
       onPointerDown={(e) => {
         e.preventDefault()
         onPointerDown(pos)
-      }}
-      onPointerEnter={(e) => {
-        if (e.buttons > 0) onPointerEnter(pos)
       }}
     >
       {syllable}
