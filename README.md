@@ -1,36 +1,73 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 한글 낱말 찾기
 
-## Getting Started
+한국어 음절 기반 낱말 찾기(Word Search) 퍼즐 웹 게임.
 
-First, run the development server:
+그리드에 숨겨진 한글 단어를 드래그하여 찾아보세요.
+
+## 게임 방법
+
+1. 난이도(그리드 크기)를 선택하고 **게임 시작** 버튼을 누릅니다.
+2. 좌측 패널에서 숨겨진 단어 목록을 확인합니다. (처음엔 `***`로 마스킹)
+3. 그리드에서 단어를 드래그하여 선택합니다. 8방향(상하좌우 + 대각선) 모두 가능.
+4. 제한 시간 안에 모든 단어를 찾으면 승리!
+
+### 힌트 시스템
+
+| 남은 시간 | 단어 표시 |
+|-----------|-----------|
+| 31초 이상 | `***` (전체 마스킹) |
+| 30초 이하 | `*한민*` (중간 글자 공개) |
+| 10초 이하 | `대한민국` (전체 공개) |
+
+힌트가 바뀌는 순간 단어 패널 테두리가 깜빡여 알려줍니다.
+
+### 난이도
+
+| 그리드 | 단어 수 | 제한 시간 |
+|--------|---------|-----------|
+| 7×4    | 3개     | 60초      |
+| 7×5    | 4개     | 75초      |
+| 8×6    | 5개     | 90초      |
+| 8×7    | 6개     | 105초     |
+| 8×8    | 7개     | 120초     |
+
+## 기술 스택
+
+- **Next.js 15** (App Router) + TypeScript
+- **TailwindCSS 4**
+- **Zustand** — 게임 상태 관리
+- **Noto Sans KR** — 한글 폰트
+- **Vitest** + React Testing Library — 유닛 테스트
+- **Google Gemini Flash** — AI 단어 생성 (선택적)
+
+## 시작하기
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+pnpm install
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+브라우저에서 [http://localhost:3000](http://localhost:3000)을 열면 됩니다.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 환경 변수 (선택적)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+AI 기반 테마 단어 생성 기능을 사용하려면 `.env.local`을 생성하세요.
 
-## Learn More
+```bash
+cp .env.local.example .env.local
+# GEMINI_API_KEY 값을 채워넣으세요
+```
 
-To learn more about Next.js, take a look at the following resources:
+API 키가 없으면 내장 사전(550개 한글 명사)에서 자동으로 단어를 선택합니다.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 테스트
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+pnpm test
+```
 
-## Deploy on Vercel
+핵심 게임 로직(방향 벡터, 그리드 생성, 단어 배치, 선택 검증)에 대한 33개 유닛 테스트가 포함되어 있습니다.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 배포
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Vercel에 바로 배포할 수 있습니다. Gemini API를 사용할 경우 Vercel 프로젝트의 Environment Variables에 `GEMINI_API_KEY`를 추가하세요.
