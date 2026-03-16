@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { DIRECTION_VECTORS, ALL_DIRECTIONS, getDirection } from '../direction'
+import { DIRECTION_VECTORS, ALL_DIRECTIONS, getDirection, getDirectionFromAngle } from '../direction'
 
 describe('direction', () => {
   describe('DIRECTION_VECTORS', () => {
@@ -45,6 +45,36 @@ describe('direction', () => {
 
     it('오른쪽 아래 대각선이면 down-right를 반환해야 한다', () => {
       expect(getDirection(0, 0, 2, 2)).toBe('down-right')
+    })
+  })
+
+  describe('getDirectionFromAngle', () => {
+    it('최소 거리 미만이면 null을 반환해야 한다', () => {
+      expect(getDirectionFromAngle(3, 3)).toBeNull()
+    })
+
+    it('오른쪽 (0°)이면 right를 반환해야 한다', () => {
+      expect(getDirectionFromAngle(50, 0)).toBe('right')
+    })
+
+    it('아래쪽 (90°)이면 down을 반환해야 한다', () => {
+      expect(getDirectionFromAngle(0, 50)).toBe('down')
+    })
+
+    it('대각선 아래-오른쪽 (45°)이면 down-right를 반환해야 한다', () => {
+      expect(getDirectionFromAngle(50, 50)).toBe('down-right')
+    })
+
+    it('대각선 위-왼쪽 (-135°)이면 up-left를 반환해야 한다', () => {
+      expect(getDirectionFromAngle(-50, -50)).toBe('up-left')
+    })
+
+    it('22° 미만 기울기는 right로 판정해야 한다', () => {
+      expect(getDirectionFromAngle(50, 10)).toBe('right') // ~11.3°
+    })
+
+    it('23° 이상 기울기는 down-right로 판정해야 한다', () => {
+      expect(getDirectionFromAngle(50, 30)).toBe('down-right') // ~31°
     })
   })
 })

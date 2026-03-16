@@ -12,7 +12,7 @@ interface CellProps {
   justFoundIndex?: number
   unfoundColor?: string
   unfoundDelay?: number
-  onPointerDown: (pos: Position) => void
+  onPointerDown: (pos: Position, e: React.PointerEvent) => void
 }
 
 // 단어별 고정 색상 팔레트 (파스텔톤)
@@ -72,7 +72,7 @@ export function Cell({
       data-col={col}
       onPointerDown={(e) => {
         e.preventDefault()
-        onPointerDown(pos)
+        onPointerDown(pos, e)
       }}
     >
       {syllable}

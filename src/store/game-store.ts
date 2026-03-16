@@ -4,13 +4,13 @@ import { getGridConfig } from '@/lib/game/scaler'
 import { generateGrid } from '@/lib/game/grid-generator'
 import { getMixedRandomWords } from '@/lib/words/dictionary'
 import { validateSelection, isAllWordsFound } from '@/lib/game/validator'
-import { getDirection } from '@/lib/game/direction'
+import { getDirection, getDirectionFromAngle } from '@/lib/game/direction'
 import { DIRECTION_VECTORS } from '@/lib/game/direction'
 
 interface GameActions {
   initGame: (size?: GridSize) => void
   startDrag: (pos: Position) => void
-  continueDrag: (pos: Position) => void
+  continueDrag: (pos: Position, pixelDelta?: { dx: number; dy: number }) => void
   endDrag: () => void
   tick: () => void
   setGridSize: (size: GridSize) => void
@@ -94,19 +94,20 @@ export const useGameStore = create<GameStore>((set, get) => ({
     })
   },
 
-  continueDrag: (pos) => {
+  continueDrag: (pos, pixelDelta) => {
     const { dragStart, dragDirection } = get()
     if (!dragStart) return
 
-    // 방향 결정 (아직 미결정이면 첫 이동으로 결정)
     let direction = dragDirection
     if (!direction) {
-      const newDir = getDirection(dragStart.row, dragStart.col, pos.row, pos.col)
-      if (!newDir) return
+      // 픽셀 델타가 있으면 각도 기반, 없으면 기존 셀 좌표 기반 (fallback)
+      const newDir = pixelDelta
+        ? getDirectionFromAngle(pixelDelta.dx, pixelDelta.dy)
+        : getDirection(dragStart.row, dragStart.col, pos.row, pos.col)
+      if (!newDir) return // 최소 거리 미달 → 아직 방향 미결정
       direction = newDir
     }
 
-    // 방향이 고정된 상태에서 드래그 경로 계산
     const cells = computeDragCells(dragStart, pos, direction)
     set({ dragDirection: direction, selectedCells: cells })
   },

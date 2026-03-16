@@ -21,6 +21,7 @@ export function Grid() {
 
   // 마지막으로 진입한 셀을 추적해 불필요한 continueDrag 호출 방지
   const lastCell = useRef<string | null>(null)
+  const dragStartPixel = useRef<{ x: number; y: number } | null>(null)
 
   const selectedSet = new Set(selectedCells.map((p) => `${p.row},${p.col}`))
 
@@ -53,9 +54,10 @@ export function Grid() {
   }
 
   const handlePointerDown = useCallback(
-    (pos: Position) => {
+    (pos: Position, e: React.PointerEvent) => {
       if (status !== 'playing') return
       lastCell.current = `${pos.row},${pos.col}`
+      dragStartPixel.current = { x: e.clientX, y: e.clientY }
       startDrag(pos)
     },
     [status, startDrag]
@@ -79,7 +81,10 @@ export function Grid() {
 
       if (key === lastCell.current) return
       lastCell.current = key
-      continueDrag({ row, col })
+      const pixelDelta = dragStartPixel.current
+        ? { dx: e.clientX - dragStartPixel.current.x, dy: e.clientY - dragStartPixel.current.y }
+        : undefined
+      continueDrag({ row, col }, pixelDelta)
     },
     [status, continueDrag]
   )
@@ -87,6 +92,7 @@ export function Grid() {
   const handlePointerUp = useCallback(() => {
     if (status !== 'playing') return
     lastCell.current = null
+    dragStartPixel.current = null
     endDrag()
   }, [status, endDrag])
 
